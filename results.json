@@ -1,0 +1,37 @@
+{
+  "question": "Can a class-balanced, CV-tuned LightGBM predict stale replica reads more accurately than a standard replica-lag threshold rule, using the same seeded simulated replicated store?",
+  "method": "Seeded simulation of a replicated store with Poisson writes, per-replica lognormal propagation lags and random reads; reads labelled stale when the chosen replica lacks the latest write. Time-ordered train/test split fixed before fitting; tuning only by CV on training data; test set used once. Both models run with seeds 42, 43, 44.",
+  "dataset": {
+    "name": "Simulated replicated store (generated in analysis.py)",
+    "source_url": "none: generated in-script",
+    "n_rows": 200000,
+    "n_train": 150000,
+    "n_test": 50000,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "stale-class F1 on held-out test reads",
+  "higher_is_better": true,
+  "baseline": "Standard replica-lag threshold rule: flag a read as stale when the replica's time since last sync exceeds a threshold chosen by stratified CV F1 on the training set.",
+  "improved": "Class-balanced LightGBM on per-read features (sync age, pending-update count, replica load, recent write rate, replica id); leaves and min child samples chosen by CV, and the decision threshold chosen on out-of-fold probabilities by CV F1 on the training set.",
+  "metrics": {
+    "baseline_f1": 0.9710738261954605,
+    "baseline_f1_std": 0.0,
+    "baseline_roc_auc": 0.7978560060557601,
+    "baseline_roc_auc_std": 1.1102230246251565e-16,
+    "baseline_fpr": 0.8196457326892109,
+    "baseline_fpr_std": 0.0,
+    "improved_f1": 0.9959252351605579,
+    "improved_f1_std": 0.0,
+    "improved_roc_auc": 0.9840485170422117,
+    "improved_roc_auc_std": 0.0,
+    "improved_fpr": 0.24154589371980675,
+    "improved_fpr_std": 0.0,
+    "baseline_score": 0.9710738261954605,
+    "improved_score": 0.9959252351605579,
+    "baseline_score_std": 0.0,
+    "improved_score_std": 0.0,
+    "improvement": 0.02485140896509741
+  },
+  "notes": "Simulation is a stand-in, not a re-implementation of re:GRIDiT, and the paper reports no measurable model. Labels and features come from the simulator; pending updates are a replica-side queue count, so the task is not trivially solved. The split is time-ordered as the method specifies rather than stratified. Std is over model/CV seeds only; the simulated dataset is a single draw with a fixed seed."
+}

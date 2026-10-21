@@ -21,6 +21,34 @@ python analysis.py
 
 Results: written to results.json (and figures/f1_comparison.png).
 
+## Results (latest run)
+
+In my run, on a seeded simulated replicated store (50,000 held-out test reads), stale-class F1 was 0.971 for a standard replica-lag threshold rule versus 0.996 for a class-balanced, CV-tuned LightGBM, a small gain of about 2.5 points from a single simulated dataset draw.
+
+| Metric | Value |
+|---|---|
+| baseline_f1 | 0.9711 |
+| baseline_f1_std | 0 |
+| baseline_roc_auc | 0.7979 |
+| baseline_roc_auc_std | 1.11e-16 |
+| baseline_fpr | 0.8196 |
+| baseline_fpr_std | 0 |
+| improved_f1 | 0.9959 |
+| improved_f1_std | 0 |
+| improved_roc_auc | 0.984 |
+| improved_roc_auc_std | 0 |
+| improved_fpr | 0.2415 |
+| improved_fpr_std | 0 |
+| baseline_score | 0.9711 |
+| improved_score | 0.9959 |
+| baseline_score_std | 0 |
+| improved_score_std | 0 |
+| improvement | 0.02485 |
+
+Run on 2026-10-21. Full output: [results.json](results.json) · [run.log](run.log)
+
+Notes: Simulation is a stand-in, not a re-implementation of re:GRIDiT, and the paper reports no measurable model. Labels and features come from the simulator; pending updates are a replica-side queue count, so the task is not trivially solved. The split is time-ordered as the method specifies rather than stratified. Std is over model/CV seeds only; the simulated dataset is a single draw with a fixed seed.
+
 ## Reference
 
 This project is motivated by the following paper:
